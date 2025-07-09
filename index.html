@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steelheart Forge | AI Mech Art Generator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #111827;
+            color: #e5e7eb;
+        }
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .form-container {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 0 25px rgba(0, 191, 255, 0.1);
+        }
+        .btn-primary {
+            background-color: #0ea5e9; /* sky-500 */
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn-primary:hover {
+            background-color: #0284c7; /* sky-600 */
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.5);
+        }
+        .upload-box {
+            border: 2px dashed #4b5563;
+            background-color: #374151;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .upload-box:hover {
+            border-color: #0ea5e9;
+            background-color: #4b5563;
+        }
+        .input-field {
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            color: #e5e7eb;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.4);
+        }
+        .image-container {
+            position: relative;
+            max-width: 600px;
+            margin: 2rem auto;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 2px solid #374151;
+        }
+        .image-label {
+            position: absolute;
+            top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            border-radius: 0.375rem;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+        
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold text-sky-400 tracking-wider">Steelheart Forge</h1>
+            <h2 class="mt-4 text-xl md:text-2xl text-gray-300">Turn Your Photos into Epic Mech Art</h2>
+        </header>
+
+        <main>
+            <section id="comparison">
+                <div class="image-container">
+                    <img src="https://r2.flowith.net/files/o/1748945159572-high_quality_side_by_side_contrast_image_index_0@1024x1024.png" alt="Before and After comparison of a photo turned into mech art" class="w-full h-auto">
+                    <span class="image-label" style="left: 1rem;">Before</span>
+                    <span class="image-label" style="right: 1rem;">After</span>
+                </div>
+            </section>
+            
+            <section id="generator" class="max-w-2xl mx-auto my-12">
+                <div class="form-container">
+                    <h3 class="text-2xl font-bold text-center mb-6">Create Your Mech Artwork Now!</h3>
+                    <p class="text-center text-gray-400 mb-8">Upload a photo, add an optional description, and we'll send your masterpiece to your email. No artistic skills required!</p>
+                    
+                    <form class="space-y-6">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Your Email Address</label>
+                            <input type="email" id="email" name="email" class="input-field" placeholder="you@example.com">
+                            <p class="mt-2 text-xs text-gray-400">Your finished artwork will be sent here.</p>
+                        </div>
+
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-300 mb-2">Custom Details (Optional)</label>
+                            <textarea id="description" name="description" rows="3" class="input-field" placeholder="e.g., 'heavy armor, neon blue highlights, shoulder cannons'"></textarea>
+                            <p class="mt-2 text-xs text-gray-400">Describe your mech's style, weapons, or colors.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Upload Your Photo</label>
+                            <div class="upload-box" id="uploadArea">
+                                <p class="text-gray-300">Click to upload or drag & drop</p>
+                                <p class="text-xs text-gray-400 mt-1">Supported: JPG, PNG, GIF, WebP. Max 10MB.</p>
+                            </div>
+                            <input type="file" id="fileInput" class="hidden" accept=".jpg,.jpeg,.png,.gif,.webp" multiple>
+                        </div>
+                        
+                        <div id="imagePreview" class="mt-4 grid grid-cols-3 gap-2"></div>
+                        
+                        <div id="feedbackArea" class="mt-4 text-sm"></div>
+
+                        <div class="pt-4">
+                            <button type="button" id="startProcessBtn" class="btn-primary w-full">
+                                Generate Your Mech Art
+                            </button>
+                            <p class="mt-3 text-xs text-center text-gray-500">Note: This is a simulated environment; transaction and generation are illustrative.</p>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="about" class="max-w-3xl mx-auto my-16 text-center">
+                 <h3 class="text-2xl font-bold mb-4">About Steelheart Forge</h3>
+                 <p class="text-gray-300 leading-relaxed">
+                    Steelheart Forge uses advanced AI to transform your photos into incredible cyberpunk mech artworks. Our powerful engine renders your image with intricate mechanical designs and battle-tested aesthetics, delivering spectacular results that capture the raw power of the cyber-age. It's your personal gateway to a world of high-tech cybernetics.
+                 </p>
+            </section>
+
+           <script src="script.js" onerror="console.error('Failed to load script.js')"></script>
+           <script>
+               window.addEventListener('error', (event) => {
+                   console.error('Script error:', event.message, 'in', event.filename);
+               });
+           </script>
+            
+            <section id="faq" class="max-w-3xl mx-auto my-16">
+                <h3 class="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h3>
+                <div class="space-y-6">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h4 class="font-semibold text-lg text-sky-400">How long does it take to generate a mech?</h4>
+                        <p class="mt-2 text-gray-300">Synthesis time varies based on system load and design complexity, typically a few minutes. Please be patient during processing. (*Note: This is a simulated environment; processing times are illustrative.*)</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h4 class="font-semibold text-lg text-sky-400">Why do you need my email?</h4>
+                        <p class="mt-2 text-gray-300">To securely and privately deliver your high-resolution mech art once it's ready.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h4 class="font-semibold text-lg text-sky-400">Is my uploaded data secure?</h4>
+                        <p class="mt-2 text-gray-300">Absolutely. Your photos are only used to create your artwork and are deleted from our systems afterward to protect your privacy.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-16 pt-8 border-t border-gray-700">
+            <p class="text-gray-500">&copy; 2025 Steelheart Forge. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

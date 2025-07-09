@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steelheart Forge - Payment</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body class="bg-slate-950 text-slate-300 font-sans leading-relaxed">
+    <style>
+        .neon-text-cyan {
+            color: #22d3ee;
+            text-shadow: 0 0 5px #22d3ee, 0 0 10px #22d3ee, 0 0 15px #22d3ee, 0 0 20px #06b6d4;
+        }
+        .neon-text-pink {
+            color: #ec4899;
+            text-shadow: 0 0 5px #ec4899, 0 0 10px #ec4899, 0 0 15px #ec4899, 0 0 20px #d946ef;
+        }
+        .neon-text-yellow {
+            color: #facc15;
+            text-shadow: 0 0 5px #facc15, 0 0 10px #facc15, 0 0 15px #eab308;
+        }
+        .cyber-border {
+            border: 1px solid #0891b2;
+            box-shadow: 0 0 8px #06b6d4, inset 0 0 8px #06b6d4;
+        }
+        .cyber-button {
+            background-color: rgba(6, 182, 212, 0.3);
+            border: 1px solid #06b6d4;
+            color: #e0f2fe;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 3px #06b6d4;
+        }
+        .cyber-button:hover {
+            background-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 10px #06b6d4, 0 0 15px #06b6d4;
+        }
+        .card-bg {
+             background-color: rgba(30, 41, 59, 0.6);
+             backdrop-filter: blur(5px);
+        }
+    </style>
+
+    <div id="main-background" class="fixed inset-0 z-[-1] opacity-30">
+        <img src="https://r2.flowith.net/files/o/1748886818252-cyberpunk_mecha_warrior_combat_pose_concept_index_1@1536x1024.png" alt="Cyberpunk Mecha Background" class="w-full h-full object-cover">
+    </div>
+
+    <header class="py-12 text-center relative">
+        <div class="absolute top-4 right-4 md:top-8 md:right-8 opacity-70">
+            <img src="https://r2.flowith.net/files/o/1748886808145-cyberpunk_mecha_warrior_close_up_concept_index_2@1024x1024.png" alt="Mecha Head Close-up" class="w-24 h-24 md:w-32 md:h-32 object-contain rounded-full border-2 border-cyan-500 shadow-lg shadow-cyan-500/50">
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold neon-text-cyan tracking-wider">Steelheart Forge</h1>
+        <p class="mt-4 text-xl md:text-2xl text-slate-400 neon-text-pink">Complete Your Transaction</p>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 max-w-4xl space-y-12">
+        <section id="payment-section" class="card-bg p-6 md:p-8 rounded-lg cyber-border">
+            <h2 class="section-title neon-text-yellow">Payment Gateway</h2>
+            <div class="mb-6 cyber-glow-text animate-pulse">
+                <p class="text-lg text-cyan-300 font-mono tracking-wider">
+                    <span class="text-pink-400">>></span> INITIATE PAYMENT PROTOCOL
+                </p>
+                <p class="text-sm text-slate-300 mt-1 font-mono">
+                    Secure transaction channel established
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="cyber-border p-4 rounded">
+                    <h3 class="text-xl font-semibold text-cyan-400 mb-2">Order Summary</h3>
+                    <div class="space-y-2 py-2 border-b border-slate-700">
+                        <div class="flex justify-between">
+                            <span>Customer Email:</span>
+                            <span class="text-cyan-400" id="customerEmail">${email}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Mech Transformation</span>
+                            <span>$19.99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Custom Details:</span>
+                            <span class="text-pink-400" id="customDetails">${desc}</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between py-2 font-bold">
+                        <span>Total</span>
+                        <span>$19.99</span>
+                    </div>
+                </div>
+
+                <div id="paypal-button-container" class="mt-6">
+                    <!-- PayPal按钮将在这里插入 -->
+                </div>
+
+                <p class="text-xs text-slate-500 mt-4">
+                    <i data-lucide="lock" class="inline-block w-4 h-4 mr-1"></i>
+                    Your payment is secure and encrypted
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <div class="fixed bottom-4 right-4">
+        <button id="testEmailBtn" class="cyber-button px-4 py-2 rounded text-xs">
+            <i data-lucide="mail" class="w-4 h-4 mr-1"></i> 测试邮件发送
+        </button>
+    </div>
+
+    <footer class="text-center py-8 text-slate-500 border-t border-slate-700/50 mt-12">
+        <p>&copy; 2025 Steelheart Forge NetDivision. All Rights Reserved. System Protocol v1.33.7</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="module" src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化EmailJS
+            emailjs.init('vJEfaXcRnPHuiyolZ');
+            // 解析URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            const desc = urlParams.get('desc');
+
+            // 显示订单信息
+            if (email) {
+                document.getElementById('customerEmail').textContent = email;
+            }
+            if (desc) {
+                document.getElementById('customDetails').textContent = desc;
+            }
+
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
